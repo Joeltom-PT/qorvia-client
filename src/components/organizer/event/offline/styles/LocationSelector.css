@@ -1,0 +1,20 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }
+  
+  .search-input {
+    height: 25px;
+    margin-right: 5px;
+    padding: 5px;
+    font-size: 14px;
+  }
+  
+  .search-button {
+    height: 25px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  

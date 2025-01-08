@@ -1,0 +1,26 @@
+/* CalendarCustomStyles.css */
+
+.rbc-event {
+    @apply bg-blue-900 border-blue-900 text-white;
+  }
+  
+  .rbc-selected {
+    @apply bg-blue-700 border-blue-700 text-white;
+  }
+  
+  .rbc-toolbar button {
+    @apply bg-blue-100 text-blue-900 border-0 rounded-md py-1 px-2;
+  }
+  
+  .rbc-toolbar button:hover {
+    @apply bg-blue-200;
+  }
+  
+  .rbc-day-bg {
+    @apply bg-blue-50;
+  }
+  
+  .rbc-time-slot {
+    @apply border-blue-100;
+  }
+  

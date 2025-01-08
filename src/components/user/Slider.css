@@ -1,0 +1,35 @@
+@keyframes moveUpDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.icon-animation {
+  animation: moveUpDown 2s infinite;
+}
+
+.slide-content {
+  z-index: 1;
+}
+
+@keyframes small-move {
+  0% {
+    background-position: center;
+  }
+  50% {
+    background-position: center 1px;
+  }
+  100% {
+    background-position: center;
+  }
+}
+
+.slider-background {
+  animation: small-move 5s infinite;
+}
