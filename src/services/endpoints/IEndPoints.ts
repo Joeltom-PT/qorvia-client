@@ -23,6 +23,9 @@ export interface IUserEndPoints extends IEndPoints {
   getOrganizerProfileData: string;
 
   bookingFromSubmit: string;
+  getAllRegisteredEvents: string;
+  checkRoomAccess: string;
+  getStreamKey: string;
 }
 
 export interface IOrganizerEndPoints extends IEndPoints {
@@ -69,6 +72,7 @@ export interface IOrganizerEndPoints extends IEndPoints {
   withdrawEventApprovalRequest: string;
 
   getBookedUsersList: string;
+  fetchLiveEvents: string;
 }
 
 export interface IAdminEndPoints {

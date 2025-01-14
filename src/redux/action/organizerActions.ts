@@ -4,7 +4,7 @@ import axiosInstance from "../../axios/axiosInstance";
 import { AxiosError } from "axios";
 import { organizerEndPoints, userEndPoints } from "../../services/endpoints/endPoints";
 import { toast } from "react-toastify";
-import { ICreateOfflineEventDetail, ICreateOnlineEventDetail, IEvent, IEventCategory, IOfflineEventDetail, IOfflineEventTickets, IOfflineEventTimeSlot, IOnlineEventDetail, IOnlineEventTickets, IOnlineEventTimeSlot } from "../../interfaces/event";
+import { ICreateOfflineEventDetail, ICreateOnlineEventDetail, IEvent, IEventCategory, ILiveEvent, IOfflineEventDetail, IOfflineEventTickets, IOfflineEventTimeSlot, IOnlineEventDetail, IOnlineEventTickets, IOnlineEventTimeSlot } from "../../interfaces/event";
 import { BookingSettingsData } from "../../components/organizer/event/online/OnlineEventSettings";
 import { IOfflineBookingSettingsData } from "../../components/organizer/event/offline/OfflineEventSettings";
 import { IOrganizersForCollaboration } from "../../components/organizer/modal/CollaborationRequestModal";
@@ -658,6 +658,25 @@ export const getAccountConnectingLink = createAsyncThunk<string, void>(
     async (_, { rejectWithValue }) => {
       try {
         const response = await axiosInstance.get(organizerEndPoints.getAccountConnectingLink);
+        console.log('API response data:', response.data);
+        return response.data;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error('Axios error:', error.response?.data);
+          return rejectWithValue(error.response?.data);
+        }
+        console.error('Unknown error:', error);
+        return rejectWithValue('An unknown error occurred');
+      }
+    }
+  );
+  
+
+  export const fetchLiveEvents = createAsyncThunk<ILiveEvent[], void>(
+    'organizer/fetchLiveEvents',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.get(organizerEndPoints.fetchLiveEvents);
         console.log('API response data:', response.data);
         return response.data;
       } catch (error) {

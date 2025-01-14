@@ -47,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           onClick={() => navigate('/')} 
         />
         <div className="flex items-center space-x-4">
-          <button onClick={handleProfile} className='w-[45px] h-[45px] rounded-full border-2 border-blue-900'>
+          <button onClick={handleProfile} className={`w-[45px] h-[45px] rounded-full border-2 ${isFloating ? ' border-blue-100' : 'border-blue-900'}`}>
             {user.isLogged ? 
               <img src={user.user?.pro_img ? user.user.pro_img : "user/profile/default_profile_img_low.png" } alt="User Profile" className='rounded-full'/> :
               <img src="user/profile/default_profile_img_low.png" alt="Default Profile" className='transform mx-auto rounded-full'/>

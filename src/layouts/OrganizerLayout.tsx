@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaCalendarAlt, FaBlog, FaChartBar, FaFileAlt, FaCreditCard, FaCog, FaUser, FaSignOutAlt, FaQuestionCircle, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaCalendarAlt, FaBlog, FaChartBar, FaFileAlt, FaCreditCard, FaCog, FaUser, FaSignOutAlt, FaQuestionCircle, FaBars, FaTimes, FaVideo } from 'react-icons/fa';
 import { IconType } from 'react-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutOrganizer } from '../redux/action/organizerActions';
@@ -17,6 +17,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: FaHome, label: 'Home', link: '/organizer/dashboard' },
+  { icon: FaVideo, label: 'Live', link: '/organizer/live' },
   { icon: FaCalendarAlt, label: 'Events', link: '/organizer/event-management' },
   { icon: FaBlog, label: 'Blogs', link: '/organizer/blog-management' },
   { icon: FaChartBar, label: 'Reports and Graph', link: '/organizer/reports-and-graph' },
@@ -115,6 +116,8 @@ const OrganizerLayout: React.FC = () => {
         return 'Settings';
       case '/organizer/profile':
         return 'Profile';  
+      case '/organizer/live':
+        return 'Live Events'
       default:
         return 'Organizer Dashboard';
     }

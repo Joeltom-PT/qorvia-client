@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
 
 interface StatCard {
   label: string;
@@ -13,6 +15,9 @@ interface Event {
 }
 
 const OrganizerDashboard: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  // const [connectionLoading, setConnectionLoading] = useState(true);
+  // const [connectedAccountDetails, setConnectedAccountDetails] = useS
   const statCards: StatCard[] = [
     { label: 'Total events', value: '8' },
     { label: 'Events this week', value: '2' },
@@ -27,6 +32,20 @@ const OrganizerDashboard: React.FC = () => {
     { name: 'Seminar: Leadership Training', start: 'Jan 8, 1:00 PM', end: 'Jan 8, 5:00 PM', location: 'New York' },
     { name: 'Summit: Innovation Showcase', start: 'Feb 20, 11:00 AM', end: 'Feb 21, 3:00 PM', location: 'Austin' },
   ];
+
+
+// const isConnectionCheck = async () => {
+//   try {
+//     setConnectionLoading(true);
+//     const response = await dispatch(yourApiCall()).unwrap();
+//     console.log(response);
+//   } catch (error) {
+//     console.error(error);
+//   } finally {
+//     setConnectionLoading(false);
+//   }
+// };
+
 
   return (
     <div>

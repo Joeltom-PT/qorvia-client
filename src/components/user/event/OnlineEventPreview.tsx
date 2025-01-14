@@ -229,9 +229,6 @@ const OnlineEventPreview: React.FC<{
             organizerId={organizerId}
             content="Register Now"
           />
-          {/* <button className="flex-1 px-6 py-3 border-2 border-blue-900 text-blue-900 font-bold rounded-[5px] hover:bg-gray-50 transition-colors">
-            Contact Organizer
-          </button> */}
         </div>
       </div>
     </div>

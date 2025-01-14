@@ -111,20 +111,24 @@ const OrganizerRegister: React.FC = () => {
   };
 
   return (
-    <div className={`max-w-lg mx-auto mt-5 p-6 bg-white rounded-lg shadow-md transition-opacity duration-500 ${success ? 'opacity-100' : 'opacity-100'}`}>
+    <div className="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
       {success ? (
         <div className="text-center">
           <h1 className="text-2xl font-bold text-green-600 mb-4">Registration Successful!</h1>
           <p className="text-blue-800 mb-4">Your registration request is pending. When approved, a notification will be sent to your email.</p>
-          <p className="text-blue-800">Click here to login : <Link to='/login-organizer' className="underline">Login here</Link></p>
+          <p className="text-blue-800">
+            Click here to login: <Link to="/login-organizer" className="underline">Login here</Link>
+          </p>
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="text-2xl font-bold text-blue-900 mb-4">Event Organizer Registration</h1>
-          <div className="mb-4">
-            <label htmlFor="profileImage" className="block text-blue-800 mb-2">Profile Image</label>
-            <div className='flex-col justify-center w-full'>
-              <div className='flex justify-center items-center'>
+          <h1 className="text-2xl font-bold text-blue-900 mb-8">Event Organizer Registration</h1>
+          <div className="grid grid-cols-2 gap-8">
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="profileImage" className="block text-blue-800 mb-2">
+                Profile Image
+              </label>
+              <div className="flex justify-center items-center">
                 <CloudinaryUpload
                   ref={uploadRef}
                   fixedSize={{ width: 16, height: 9 }}
@@ -134,75 +138,243 @@ const OrganizerRegister: React.FC = () => {
               </div>
               {errors.profileImage && <p className="text-red-600">{errors.profileImage.message}</p>}
             </div>
-          </div>
-
-          {Object.keys(schema.fields).map((key) => (
-            key !== 'profileImage' && (
-              <div className="mb-4" key={key}>
-                <label htmlFor={key} className="block text-blue-800 mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
-                {key === 'country' ? (
-                  <Controller
-                    name="country"
-                    control={control}
-                    render={({ field }) => (
-                      <CountryDropdown
-                        value={field.value}
-                        onChange={(val) => {
-                          field.onChange(val);
-                          handleCountryChange(val);
-                        }}
-                        classes="w-full p-2 border border-blue-300 rounded"
-                        priorityOptions={['USA', 'CAN']}
-                      />
-                    )}
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="organizationName" className="block text-blue-800 mb-2">
+                Organization Name
+              </label>
+              <input
+                type="text"
+                id="organizationName"
+                {...register('organizationName')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.organizationName && <p className="text-red-600">{errors.organizationName.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="email" className="block text-blue-800 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                {...register('email')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.email && <p className="text-red-600">{errors.email.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="password" className="block text-blue-800 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                {...register('password')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.password && <p className="text-red-600">{errors.password.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="repeatPassword" className="block text-blue-800 mb-2">
+                Repeat Password
+              </label>
+              <input
+                type="password"
+                id="repeatPassword"
+                {...register('repeatPassword')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.repeatPassword && <p className="text-red-600">{errors.repeatPassword.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="phone" className="block text-blue-800 mb-2">
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                {...register('phone')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.phone && <p className="text-red-600">{errors.phone.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="website" className="block text-blue-800 mb-2">
+                Website
+              </label>
+              <input
+                type="text"
+                id="website"
+                {...register('website')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.website && <p className="text-red-600">{errors.website.message}</p>}
+            </div>
+            <div className="col-span-2">
+              <label htmlFor="address" className="block text-blue-800 mb-2">
+                Address
+              </label>
+              <input
+                type="text"
+                id="address"
+                {...register('address')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.address && <p className="text-red-600">{errors.address.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="address2" className="block text-blue-800 mb-2">
+                Address 2 (Optional)
+              </label>
+              <input
+                type="text"
+                id="address2"
+                {...register('address2')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.address2 && <p className="text-red-600">{errors.address2.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="city" className="block text-blue-800 mb-2">
+                City
+              </label>
+              <input
+                type="text"
+                id="city"
+                {...register('city')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.city && <p className="text-red-600">{errors.city.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="country" className="block text-blue-800 mb-2">
+                Country
+              </label>
+              <Controller
+                name="country"
+                control={control}
+                render={({ field }) => (
+                  <CountryDropdown
+                    value={field.value}
+                    onChange={(val) => {
+                      field.onChange(val);
+                      handleCountryChange(val);
+                    }}
+                    classes="w-full p-3 border border-blue-300 rounded-md"
+                    priorityOptions={['USA', 'CAN']}
                   />
-                ) : key === 'state' ? (
-                  <Controller
-                    name="state"
-                    control={control}
-                    render={({ field }) => (
-                      <RegionDropdown
-                        country={watch('country')}
-                        value={field.value}
-                        onChange={field.onChange}
-                        classes={`w-full p-2 border border-blue-300 rounded ${!field.value ? 'bg-gray-200' : ''}`}
-                      />
-                    )}
-                  />
-                ) : key === 'about' ? (
-                  <textarea
-                    id={key}
-                    {...register(key as keyof FormData)}
-                    rows={4}
-                    className="w-full p-2 border border-blue-300 rounded"
-                    placeholder="Tell us about yourself (at least 50 characters)"
-                  />
-                ) : (
-                  <div>
-                    <input
-                      type={key.toLowerCase().includes('password') ? 'password' : 'text'}
-                      id={key}
-                      {...register(key as keyof FormData)}
-                      className="w-full p-2 border border-blue-300 rounded"
-                    />
-                    {errors[key as keyof FormData] && (
-                      <p className="text-red-600">{errors[key as keyof FormData]?.message}</p>
-                    )}
-                  </div>
                 )}
-              </div>
-            )
-          ))}
-
-          <button 
-            type="submit" 
-            disabled={loading} 
-            className={`w-full py-2 rounded transition duration-200 ${loading ? 'bg-gray-400' : 'bg-blue-900 hover:bg-blue-800 text-white'}`}
+              />
+              {errors.country && <p className="text-red-600">{errors.country.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="state" className="block text-blue-800 mb-2">
+                State
+              </label>
+              <Controller
+                name="state"
+                control={control}
+                render={({ field }) => (
+                  <RegionDropdown
+                    country={watch('country')}
+                    value={field.value}
+                    onChange={field.onChange}
+                    classes={`w-full p-3 border border-blue-300 rounded-md ${!field.value ? 'bg-gray-200' : ''}`}
+                  />
+                )}
+              />
+              {errors.state && <p className="text-red-600">{errors.state.message}</p>}
+            </div>
+            <div className="col-span-2">
+              <label htmlFor="about" className="block text-blue-800 mb-2">
+                About
+              </label>
+              <textarea
+                id="about"
+                {...register('about')}
+                rows={4}
+                className="w-full p-3 border border-blue-300 rounded-md"
+                placeholder="Tell us about yourself (at least 50 characters)"
+              />
+              {errors.about && <p className="text-red-600">{errors.about.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="facebook" className="block text-blue-800 mb-2">
+                Facebook
+              </label>
+              <input
+                type="text"
+                id="facebook"
+                {...register('facebook')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.facebook && <p className="text-red-600">{errors.facebook.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="instagram" className="block text-blue-800 mb-2">
+                Instagram
+              </label>
+              <input
+                type="text"
+                id="instagram"
+                {...register('instagram')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.instagram && <p className="text-red-600">{errors.instagram.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="twitter" className="block text-blue-800 mb-2">
+                Twitter
+              </label>
+              <input
+                type="text"
+                id="twitter"
+                {...register('twitter')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.twitter && <p className="text-red-600">{errors.twitter.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="linkedin" className="block text-blue-800 mb-2">
+                LinkedIn
+              </label>
+              <input
+                type="text"
+                id="linkedin"
+                {...register('linkedin')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.linkedin && <p className="text-red-600">{errors.linkedin.message}</p>}
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="youtube" className="block text-blue-800 mb-2">
+                YouTube
+              </label>
+              <input
+                type="text"
+                id="youtube"
+                {...register('youtube')}
+                className="w-full p-3 border border-blue-300 rounded-md"
+              />
+              {errors.youtube && <p className="text-red-600">{errors.youtube.message}</p>}
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3 rounded-md transition duration-200 ${
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-900 hover:bg-blue-800 text-white'
+            }`}
           >
             {loading ? 'Loading...' : 'Register'}
           </button>
-          <div className='p-2 mt-4 flex justify-center items-center'>
-          <p className="text-blue-800">If you don't have an account,{' '} <Link to='/login-organizer' className="underline">Login here</Link></p>
+          <div className="p-2 mt-4 flex justify-center items-center">
+            <p className="text-blue-800">
+              If you don't have an account,{' '}
+              <Link to="/login-organizer" className="underline">
+                Login here
+              </Link>
+            </p>
           </div>
         </form>
       )}

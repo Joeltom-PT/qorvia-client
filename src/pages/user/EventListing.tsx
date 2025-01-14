@@ -3,19 +3,25 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { fetchEvents } from "../../redux/action/userActions";
 import { Link, useNavigate } from "react-router-dom";
-
-import { CalendarDays, MapPin, Monitor } from "lucide-react";
-import EventHeader from "../../components/user/EventHeader";
-import EventButtonBase64 from "../../components/user/EventButtonBase64";
+import { motion } from "framer-motion";
+import { 
+  CalendarDays, 
+  ChevronDown, 
+  ChevronLeft, 
+  ChevronRight, 
+  InboxIcon, 
+  MapPin, 
+  Monitor, 
+  XCircle 
+} from "lucide-react";
 
 const EventListing: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-
   const [events, setEvents] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalElements, setTotalElements] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(8);
+  const [pageSize, setPageSize] = useState<number>(12);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -31,6 +37,12 @@ const EventListing: React.FC = () => {
   useEffect(() => {
     fetchEventsData(0);
   }, []);
+
+  const encodeBase64 = (data: object) =>
+    btoa(JSON.stringify(data))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
 
   const fetchEventsData = async (page: number = 0) => {
     setLoading(true);
@@ -94,182 +106,236 @@ const EventListing: React.FC = () => {
   };
 
   return (
-    <>
-      <EventHeader />
-      <div className="min-h-screen bg-gray-50">
-        <div className="relative h-[300px] bg-cover bg-center bg-[url('/user/bg/event-explore-search-bg.png')]">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-900/60 to-blue-900/95">
-            <div className="h-full flex flex-col justify-center items-center px-4">
-              <div className="w-full max-w-5xl backdrop-blur-xl bg-white/30 rounded-[2px] shadow-md p-4 space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                  <select
-                    name="categoryId"
-                    value={filters.categoryId}
-                    onChange={handleFilterChange}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-[5px] focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all text-sm"
-                  >
-                    <option value="">All Categories</option>
-                    <option value="1">Movies</option>
-                    <option value="2">Music</option>
-                  </select>
-                  <select
-                    name="isOnline"
-                    value={filters.isOnline}
-                    onChange={handleFilterChange}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-[5px] focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all text-sm"
-                  >
-                    <option value="">All Events</option>
-                    <option value="true">Online</option>
-                    <option value="false">Venue</option>
-                  </select>
-                  <select
-                    name="organizerId"
-                    value={filters.organizerId}
-                    onChange={handleFilterChange}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-[5px] focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all text-sm"
-                  >
-                    <option value="">All Organizations</option>
-                    <option value="1">Google</option>
-                    <option value="2">Apple</option>
-                  </select>
-                  <input
-                    type="date"
-                    name="date"
-                    value={filters.date}
-                    onChange={handleFilterChange}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-[5px] focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all text-sm"
-                  />
-                </div>
-                <div>
-                <input
-                    type="text"
-                    name="search"
-                    value={filters.search}
-                    onChange={handleFilterChange}
-                    placeholder="Search events"
-                    className=" w-3/4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-l-[5px] focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all text-sm"
-                  />
-                   <button
-                    onClick={handleApplyFilters}
-                    className=" w-1/4 px-6 py-2 bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-r-[5px] transition-colors duration-200 shadow-md hover:shadow-lg text-sm"
-                  >
-                    Search Events
-                  </button>
-                </div>
-              </div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-blue-200 to-slate-50">
+      <header className="pt-8 pb-7 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto relative">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center space-y-8"
+          >
+            <div>
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-700">
+  Explore & Book Events Tailored for You
+</h1>
+<p className="font-body text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-blue-800">
+  Experience every event as a unique journey, whether it's a physical gathering or a virtual celebration—our platform is designed to make each moment special.
+</p>
             </div>
-          </div>
-        </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          {loading ? (
-            <div className="flex justify-center items-center min-h-[400px]">
-              <div className="text-xl text-gray-600">Loading events...</div>
-            </div>
-          ) : error ? (
-            <div className="flex justify-center items-center min-h-[400px]">
-              <div className="text-xl text-red-600">Error: {error}</div>
-            </div>
-          ) : events.length === 0 ? (
-            <div className="flex justify-center items-center min-h-[400px]">
-              <div className="text-xl text-gray-600">No events found</div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-              {events.map((event) => (
-                <div
-                  key={event.eventId}
-                  className="rounded-[5px] backdrop-blur-sm border border-gray-300 overflow-hidden"
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="max-w-xl mx-auto"
+            >
+              <div className="relative group">
+              <input
+  type="text"
+  name="search"
+  value={filters.search}
+  onChange={handleFilterChange}
+  placeholder="Search for events..."
+  className="font-body w-full px-6 py-4 rounded-full border border-blue-200 bg-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 text-blue-900"
+/>
+                <button
+                  onClick={handleApplyFilters}
+                  className="absolute top-1/2 right-2 rounded-full -translate-y-1/2 px-6 py-2 bg-blue-900 text-white hover:bg-blue-800 transition-colors duration-300"
                 >
-                  <div className="sm:flex">
-                    <div className="sm:w-48 md:w-56 lg:w-64 relative">
-                      <img
-                        src={event.imgUrl}
-                        alt={event.eventName}
-                        className="h-48 sm:h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-800 text-white`}
-                        >
+                  Search
+                </button>
+              </div>
+            </motion.div>
+
+            <motion.div 
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.4, duration: 0.5 }}
+  className="flex flex-col md:flex-row justify-between items-center gap-4 max-w-2xl mx-auto"
+>
+  <div className="relative w-full md:w-1/4 group">
+    <select
+      name="categoryId"
+      value={filters.categoryId}
+      onChange={handleFilterChange}
+      className="font-body w-full px-3 py-2 appearance-none bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full text-blue-900 shadow-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none transition-all duration-300 cursor-pointer hover:bg-white"    >
+      <option value="">All Categories</option>
+      <option value="1">Movies</option>
+      <option value="2">Music</option>
+    </select>
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+      <ChevronDown className="w-4 h-4" />
+    </div>
+  </div>
+
+  <div className="relative w-full md:w-1/4 group">
+    <select
+      name="isOnline"
+      value={filters.isOnline}
+      onChange={handleFilterChange}
+      className="font-body w-full px-3 py-2 appearance-none bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full text-blue-900 shadow-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none transition-all duration-300 cursor-pointer hover:bg-white"    >
+      <option value="">All Events</option>
+      <option value="true">Online</option>
+      <option value="false">Venue</option>
+    </select>
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+      <ChevronDown className="w-4 h-4" />
+    </div>
+  </div>
+
+  <div className="relative w-full md:w-1/4 group">
+    <select
+      name="organizerId"
+      value={filters.organizerId}
+      onChange={handleFilterChange}
+      className="font-body w-full px-3 py-2 appearance-none bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full text-blue-900 shadow-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none transition-all duration-300 cursor-pointer hover:bg-white"    >
+      <option value="">All Organizations</option>
+      <option value="1">Google</option>
+      <option value="2">Apple</option>
+    </select>
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+      <ChevronDown className="w-4 h-4" />
+    </div>
+  </div>
+
+  <div className="relative w-full md:w-1/4 group">
+    <input
+      type="date"
+      name="date"
+      value={filters.date}
+      onChange={handleFilterChange}
+      className="font-body w-full px-3 py-2 appearance-none bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full text-blue-900 shadow-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none transition-all duration-300 cursor-pointer hover:bg-white"    />
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+      {/* <CalendarDays className="w-4 h-4" /> */}
+    </div>
+  </div>
+</motion.div>
+          </motion.div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4">
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[400px]">
+            Loading...
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center min-h-[400px]">
+            {error}
+          </div>
+        ) : events.length === 0 ? (
+          <div className="flex justify-center items-center min-h-[400px]">
+            No events found
+          </div>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-3"
+          >
+            {events.map((event) => (
+              <motion.div
+                key={event.eventId}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => {
+                  navigate(`/event/${encodeBase64({ 
+                    eventId: event.eventId, 
+                    organizerId: event.organizerId, 
+                    isOnline: event.isOnline 
+                  })}`);
+                }}
+                className="cursor-pointer relative rounded-[8px] overflow-hidden hover:shadow-sm transition-all duration-200"
+              >
+                <div className="relative aspect-[4/3]">
+                  <img
+                    src={event.imgUrl}
+                    alt={event.eventName}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-4 transition-opacity">
+                    <div className="text-white space-y-2">
+                    <div className="flex items-center space-x-2">
+                        <span className="px-2 py-1 bg-white/20 rounded-[4px] text-xs">
                           {event.isOnline ? (
-                            <Monitor className="w-3 h-3 mr-1" />
+                            <span className="flex items-center">
+                              <Monitor className="w-3 h-3 mr-1" />
+                              Online
+                            </span>
                           ) : (
-                            <MapPin className="w-3 h-3 mr-1" />
+                            <span className="flex items-center">
+                              <MapPin className="w-3 h-3 mr-1" />
+                              Venue
+                            </span>
                           )}
-                          {event.isOnline ? "Online" : "Venue"}
+                        </span>
+                        <span className="px-2 py-1 bg-white/20 rounded-[4px] text-xs">
+                          {event.eventCategory}
                         </span>
                       </div>
-                    </div>
-
-                    <div className="p-6 sm:p-4 md:p-6 flex-1">
-                      <div className="flex flex-col h-full">
-                        <div className="mb-auto">
-
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors">
-                            {event.eventName}
-                          </h3>
-                          <div className="flex items-center space-x-2 mb-2">
-                            <span className="px-2.5 py-0.5 bg-blue-100 text-blue-900 rounded-[5px] text-sm font-medium">
-                              {event.eventCategory}
-                            </span>
-                          </div>
-                          <div className="flex items-center text-gray-600 mb-4">
-                            <CalendarDays className="w-4 h-4 mr-2" />
-                            <time className="text-sm">
-                              {event.startDateAndTime}
-                            </time>
-                          </div>
-                        </div>
-
-                        <div className="mt-4">
-                          <EventButtonBase64 eventId={event.eventId} organizerId={event.organizerId} isOnline={event.isOnline} />
-                        </div>
+                      
+                      <h3 className="font-heading font-semibold line-clamp-2">
+                        {event.eventName}
+                      </h3>
+                      
+                      <div className="flex items-center text-xs">
+                        <CalendarDays className="w-3 h-3 mr-1" />
+                        <time>{event.startDateAndTime}</time>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center mt-12 gap-2">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-center items-center mt-8 mb-16 gap-2"
+        >
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 0}
+            className="font-body px-3 py-1 bg-white border border-gray-200 rounded-[4px] text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-1 text-gray-700"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Previous</span>
+          </button>
+          
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => (
               <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 0}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                key={i}
+                onClick={() => handlePageChange(i)}
+                className={`font-body w-8 h-8 flex items-center justify-center rounded-[4px] text-sm transition-all duration-200 ${
+                  currentPage === i
+                    ? "bg-blue-600 text-white"
+                    : "hover:bg-gray-50 bg-white border border-gray-200 text-gray-700"
+                }`}
               >
-                Previous
+                {i + 1}
               </button>
-              <div className="flex items-center gap-2">
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                    className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
-                      currentPage === i
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-gray-50 border border-gray-300"
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages - 1}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+          
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages - 1}
+            className="font-body px-3 py-1 bg-white border border-gray-200 rounded-[4px] text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-1 text-gray-700"
+          >
+            <span>Next</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 

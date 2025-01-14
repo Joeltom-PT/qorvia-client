@@ -3,7 +3,7 @@ import { IBookingResponse, IBookingSubmitData, IForgotPasswordRequest, IForgotPa
 import axiosInstance from "../../axios/axiosInstance";
 import { commonEndPoints, userEndPoints } from "../../services/endpoints/endPoints";
 import { AxiosError } from "axios";
-import { FetchEventsParams, FetchEventsResponse, IOfflineEventData, IOnlineEventData } from "../../interfaces/event";
+import { FetchEventsParams, FetchEventsResponse, IOfflineEventData, IOnlineEventData, RegisteredEvent } from "../../interfaces/event";
 import { IOrganizerList } from "../../pages/user/OrganizerListing";
 import { OrganizerData } from "../../interfaces/admin";
 import { IOrganizerData, IOrganizerProfileData } from "../../interfaces/organizer";
@@ -395,13 +395,62 @@ export const cancelBooking = createAsyncThunk<void, {id : string}>(
 );
 
 
-
 export const getOrganizerProfileData = createAsyncThunk<IOrganizerProfileData, {id : number}>(
   'events/getOrganizerProfileData',
   async ({id}, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`${userEndPoints.getOrganizerProfileData}/${id}`);
       console.log("Organizer profile Response", response.data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unknown error occurred');
+    }
+  }
+);
+
+export const getAllRegisteredEvents = createAsyncThunk<RegisteredEvent[], void>(
+  'events/getAllRegisteredEvents',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(userEndPoints.getAllRegisteredEvents);
+      console.log("All registered events by user", response.data)
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unknown error occurred');
+    }
+  }
+);
+
+
+export const checkRoomAccess = createAsyncThunk<boolean, void>(
+  'events/checkRoomAccess',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(userEndPoints.checkRoomAccess);
+      console.log("Check user access", response.data)
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unknown error occurred');
+    }
+  }
+);
+
+
+export const getStreamKey = createAsyncThunk<string, {id : string}>(
+  'events/getStreamKey',
+  async ({id}, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`${userEndPoints.getStreamKey}/${id}`);
+      console.log("Check user access", response.data)
       return response.data;
     } catch (error) {
       if (error instanceof Error) {

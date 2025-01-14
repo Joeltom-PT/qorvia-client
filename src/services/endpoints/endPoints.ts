@@ -27,6 +27,10 @@ export const userEndPoints: IUserEndPoints = {
   getOrganizerProfileData: "/account/public/getOrganizerProfile",
 
   bookingFromSubmit: "/event/bookings",
+  getAllRegisteredEvents: "/event/getAllRegisteredEvents",
+
+  checkRoomAccess: "/communication/validate",
+  getStreamKey: "/get-streaming-key/user",
 };
 
 export const organizerEndPoints: IOrganizerEndPoints = {
@@ -81,6 +85,7 @@ export const organizerEndPoints: IOrganizerEndPoints = {
   withdrawEventApprovalRequest: "/event/withdraw-event-approval-request",
 
   getBookedUsersList: "/event/bookings/booked-users",
+  fetchLiveEvents: "/event/fetch-all-live"
 };
 
 export const adminEndPoints: IAdminEndPoints = {

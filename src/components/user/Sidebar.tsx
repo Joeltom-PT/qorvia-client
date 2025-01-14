@@ -24,15 +24,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
           <div className="p-4">
             <nav className="flex flex-col space-y-4">
-              <Link to="/" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Home</Link>
-              <Link to="/explore" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Explore Events</Link>
-              <Link to="/organizers" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Organizers</Link>
-              <Link to="/become-an-organizer" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Become an Organizer</Link>
-              <Link to="/blogs" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Blogs</Link>
-              <Link to="/contact-support" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Contact and Support</Link>
-              <Link to="/about" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">About</Link>
-              <Link to="/privacy-policy" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">Privacy and Policy</Link>
-              <Link to="/faqs" onClick={onClose} className="text-white font-light text-2xl hover:text-gray-300">FAQs</Link>
+              <Link to="/" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Home</Link>
+              <Link to="/explore" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Explore Events</Link>
+              <Link to="/organizers" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Organizers</Link>
+              <Link to="/become-an-organizer" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Become an Organizer</Link>
+              <Link to="/blogs" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Blogs</Link>
+              <Link to="/contact-support" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Contact and Support</Link>
+              <Link to="/about" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">About</Link>
+              <Link to="/privacy-policy" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">Privacy and Policy</Link>
+              <Link to="/faqs" onClick={onClose} className="text-white font-body text-2xl hover:text-gray-300">FAQs</Link>
             </nav>
           </div>
         </div>

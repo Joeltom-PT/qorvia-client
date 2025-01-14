@@ -53,10 +53,11 @@ import EventRegister from "./pages/user/EventRegister.tsx";
 import EventConfirmation from "./components/user/EventConfirmation.tsx";
 import EventTickets from "./pages/user/EventTickets.tsx";
 import BookingStatusHandler from "./components/user/BookingStatusHandler.tsx";
-import Host from "./components/Host.tsx";
-import Viewer from "./components/Viewer.tsx";
 import OrganizerProfilePage from "./pages/user/OrganizerProfilePage.tsx";
 import UserCalender from "./components/user/UserCalender.tsx";
+import LiveRoom from "./pages/user/LiveRoom.tsx";
+import OrganizerLiveEvents from "./pages/organizer/dashboard/OrganizerLiveEvents.tsx";
+import UserLiveEvent from "./components/user/UserLiveEvent.tsx";
 
 interface AnonymousRouteProps {
   children: JSX.Element;
@@ -215,6 +216,8 @@ const App: React.FC = () => {
           />
         </Route>
 
+        <Route path="live/:id" element={<UserLiveEvent />} />
+
         {/* Here is checking if the booking success or failed  */}
         <Route path="/event/booking/status/:eventParams?" element={<BookingStatusHandler />} />
 
@@ -248,6 +251,10 @@ const App: React.FC = () => {
             <Route
               path="create-offline-event"
               element={<CreateOfflineEvent />}
+            />
+            <Route
+              path="live"
+              element={<OrganizerLiveEvents />}
             />
             <Route
               path="blog-management"
@@ -334,9 +341,8 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/verifyOrganizer/:token" element={<VerifyOrganizer />} />
-
-        <Route path="/host" element={<Host />} />
-        <Route path="/viewer" element={<Viewer />} />
+        
+        <Route path="/viewer" element={<LiveRoom />} />
 
         <Route path="*" element={<NotFound />} />
         

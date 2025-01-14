@@ -230,3 +230,23 @@ export interface IEventTimeSlot {
   endTime: string;
   duration: string;
 }
+
+export interface RegisteredEvent {
+  id: string;
+  name: string;
+  isOnline: boolean;
+  isLive?: boolean;
+  isCompleted?: boolean;
+  startDateAndTime: string;
+  endDateAndTime: string;
+  imageUrl: string;
+}
+
+export interface ILiveEvent {
+  id: string;
+  name: string;
+  startDateAndTime: string;
+  endDateAndTime: string;
+  imageUrl: string;
+  isOnline: string;
+}
