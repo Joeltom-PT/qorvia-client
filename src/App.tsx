@@ -58,6 +58,8 @@ import UserCalender from "./components/user/UserCalender.tsx";
 import LiveRoom from "./pages/user/LiveRoom.tsx";
 import OrganizerLiveEvents from "./pages/organizer/dashboard/OrganizerLiveEvents.tsx";
 import UserLiveEvent from "./components/user/UserLiveEvent.tsx";
+import AdminPayoutManagement from "./pages/admin/AdminPayoutManagement.tsx";
+import AdminGraphAndReports from "./pages/admin/AdminGraphAndReports.tsx";
 
 interface AnonymousRouteProps {
   children: JSX.Element;
@@ -154,32 +156,25 @@ const App: React.FC = () => {
         <Route path="/" element={<UserLayout />}>
           {/* User Routes */}
           <Route path="/" element={<Home />} />
-          <Route
-            path="/explore"
-            element={
-              <EventListing />
-            }
-          />
+          <Route path="/explore" element={<EventListing />} />
 
-          <Route
-            path="/organizers"
-            element={
-              <OrganizerListing />
-            }
-          />
+          <Route path="/organizers" element={<OrganizerListing />} />
 
-          <Route
-            path="/host/profile/:id"
-            element={
-              <OrganizerProfilePage />
-            }
-          />
-
+          <Route path="/host/profile/:id" element={<OrganizerProfilePage />} />
 
           <Route path="/event/:eventParams" element={<EventPreview />} />
-          <Route path="/event/register/:eventParams" element={<EventRegister />} />
-          <Route path="/event/tickets/:eventParams" element={<EventTickets />} />
-          <Route path="/event/confirmation/:eventParams" element={<EventConfirmation />} />
+          <Route
+            path="/event/register/:eventParams"
+            element={<EventRegister />}
+          />
+          <Route
+            path="/event/tickets/:eventParams"
+            element={<EventTickets />}
+          />
+          <Route
+            path="/event/confirmation/:eventParams"
+            element={<EventConfirmation />}
+          />
 
           <Route
             path="/profile/*"
@@ -219,8 +214,10 @@ const App: React.FC = () => {
         <Route path="live/:id" element={<UserLiveEvent />} />
 
         {/* Here is checking if the booking success or failed  */}
-        <Route path="/event/booking/status/:eventParams?" element={<BookingStatusHandler />} />
-
+        <Route
+          path="/event/booking/status/:eventParams?"
+          element={<BookingStatusHandler />}
+        />
 
         <Route path="/organizer" element={<OrganizerLayout />}>
           <Route path="" element={<Navigate to="dashboard" replace />} />
@@ -252,10 +249,7 @@ const App: React.FC = () => {
               path="create-offline-event"
               element={<CreateOfflineEvent />}
             />
-            <Route
-              path="live"
-              element={<OrganizerLiveEvents />}
-            />
+            <Route path="live" element={<OrganizerLiveEvents />} />
             <Route
               path="blog-management"
               element={<OrganizerBlogManagement />}
@@ -329,6 +323,22 @@ const App: React.FC = () => {
               </AdminProtectedRoute>
             }
           />
+          <Route
+            path="payout-management"
+            element={
+              <AdminProtectedRoute>
+                <AdminPayoutManagement />
+              </AdminProtectedRoute>
+            }
+          />
+           <Route
+            path="graph-and-reports"
+            element={
+              <AdminProtectedRoute>
+                <AdminGraphAndReports />
+              </AdminProtectedRoute>
+            }
+          />
           // Admin Profile
           <Route
             path="profile"
@@ -341,16 +351,11 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/verifyOrganizer/:token" element={<VerifyOrganizer />} />
-        
+
         <Route path="/viewer" element={<LiveRoom />} />
 
         <Route path="*" element={<NotFound />} />
-        
-        
       </Routes>
-
-
-
 
       <ToastContainer />
     </>

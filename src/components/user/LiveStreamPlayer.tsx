@@ -3,23 +3,19 @@ import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 
 interface LiveStreamPlayerProps {
-    streamKey: string;
-  }
+  streamKey: string;
+}
 
 const LiveStreamPlayer: React.FC<LiveStreamPlayerProps> = ({ streamKey }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isServerAvailable, setIsServerAvailable] = useState<boolean>(false);
-  
+
   const checkServerAvailability = async (): Promise<void> => {
     try {
       const response = await fetch(`http://13.203.77.39/hls/${streamKey}.m3u8`, {
         method: 'HEAD',
       });
-      if (response.ok) {
-        setIsServerAvailable(true);
-      } else {
-        setIsServerAvailable(false);
-      }
+      setIsServerAvailable(response.ok);
     } catch (error) {
       setIsServerAvailable(false);
     }
@@ -28,7 +24,7 @@ const LiveStreamPlayer: React.FC<LiveStreamPlayerProps> = ({ streamKey }) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       checkServerAvailability();
-    }, 5000);
+    }, 1000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -41,7 +37,7 @@ const LiveStreamPlayer: React.FC<LiveStreamPlayerProps> = ({ streamKey }) => {
         techOrder: ['html5'],
         sources: [
           {
-            src: 'http://13.203.77.39/hls/myStreamKey.m3u8',
+            src: `http://13.203.77.39/hls/${streamKey}.m3u8`,
             type: 'application/x-mpegURL',
           },
         ],
@@ -49,16 +45,17 @@ const LiveStreamPlayer: React.FC<LiveStreamPlayerProps> = ({ streamKey }) => {
         controls: true,
       });
 
+      // Cleanup
       return () => {
         if (player) {
           player.dispose();
         }
       };
     }
-  }, [isServerAvailable]);
+  }, [isServerAvailable, streamKey]);
 
   return (
-    <div className="w-full h-full flex items-center justify-center bg-black">
+    <div className="flex items-center justify-center bg-black w-full h-full">
       {!isServerAvailable ? (
         <img
           src="https://img.freepik.com/premium-vector/creative-business-youtube-thumbnail-template-gaming-thumbnail-gaming-video-thumbnail-youtube_589251-204.jpg"
@@ -69,8 +66,11 @@ const LiveStreamPlayer: React.FC<LiveStreamPlayerProps> = ({ streamKey }) => {
         <div data-vjs-player className="w-full h-full">
           <video
             ref={videoRef}
-            className="video-js vjs-default-skin w-full h-full"
+            className="video-js vjs-default-skin"
             controls
+            width="full"
+            height="full"
+            preload="auto"
           ></video>
         </div>
       )}

@@ -30,7 +30,7 @@ export const userEndPoints: IUserEndPoints = {
   getAllRegisteredEvents: "/event/getAllRegisteredEvents",
 
   checkRoomAccess: "/communication/validate",
-  getStreamKey: "/get-streaming-key/user",
+  getStreamKey: "/communication/get-streaming-key/user",
 };
 
 export const organizerEndPoints: IOrganizerEndPoints = {
@@ -85,7 +85,11 @@ export const organizerEndPoints: IOrganizerEndPoints = {
   withdrawEventApprovalRequest: "/event/withdraw-event-approval-request",
 
   getBookedUsersList: "/event/bookings/booked-users",
-  fetchLiveEvents: "/event/fetch-all-live"
+  fetchLiveEvents: "/event/fetch-all-live",
+
+  getConnectedAccountDetails: '/payment/get-connected-account-details',
+  removeConnectedAccount: '/payment/remove-connected-account'
+
 };
 
 export const adminEndPoints: IAdminEndPoints = {

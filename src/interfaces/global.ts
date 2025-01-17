@@ -21,3 +21,9 @@ export interface BlockedUserMessage {
 export interface User {
   email: string;
 }
+
+export interface IConnectedAccount {
+  organizerEmail: string;
+  organizerAccountId: string;
+  accountStatus: string;
+} 

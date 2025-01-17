@@ -9,6 +9,7 @@ import { BookingSettingsData } from "../../components/organizer/event/online/Onl
 import { IOfflineBookingSettingsData } from "../../components/organizer/event/offline/OfflineEventSettings";
 import { IOrganizersForCollaboration } from "../../components/organizer/modal/CollaborationRequestModal";
 import { IBookedUsersListResponse } from "../../interfaces/booking";
+import { IConnectedAccount } from "../../interfaces/global";
 
 
 
@@ -689,4 +690,43 @@ export const getAccountConnectingLink = createAsyncThunk<string, void>(
       }
     }
   );
+  
+
+  export const getConnectedAccountDetails = createAsyncThunk<IConnectedAccount, void>(
+    'organizer/getConnectedAccountDetails',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.get(organizerEndPoints.getConnectedAccountDetails);
+        console.log('API response data:', response.data);
+        return response.data;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error('Axios error:', error.response?.data);
+          return rejectWithValue(error.response?.data);
+        }
+        console.error('Unknown error:', error);
+        return rejectWithValue('An unknown error occurred');
+      }
+    }
+  );
+
+
+  export const removeConnectedAccount = createAsyncThunk<void, void>(
+    'organizer/removeConnectedAccount',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.delete(organizerEndPoints.removeConnectedAccount);
+        console.log('API response data:', response.data);
+        return response.data;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error('Axios error:', error.response?.data);
+          return rejectWithValue(error.response?.data);
+        }
+        console.error('Unknown error:', error);
+        return rejectWithValue('An unknown error occurred');
+      }
+    }
+  );
+  
   

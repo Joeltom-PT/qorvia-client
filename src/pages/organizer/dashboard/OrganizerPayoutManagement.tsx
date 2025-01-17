@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Wallet, CreditCard, ArrowUpCircle, Link } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
-import { getAccountConnectingLink } from '../../../redux/action/organizerActions';
+import { getAccountConnectingLink, getConnectedAccountDetails, removeConnectedAccount } from '../../../redux/action/organizerActions';
 import { toast } from 'react-toastify';
+import { IConnectedAccount } from '../../../interfaces/global';
 
 // Mock data for payouts
 const mockPayouts = [
@@ -42,54 +43,152 @@ const mockPayouts = [
 ];
 
 function OrganizerPayoutManagement() {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState<Boolean | ''>(false);
+  const [account, setAccount] = useState<IConnectedAccount | null>(null);
+  const [loading, setLoading] = useState<string | null>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const warningModalRef = useRef<HTMLDialogElement>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleConnect = async () => {
-    if(!isConnected){
-      try {
-        const response = await dispatch(getAccountConnectingLink()).unwrap();
-        window.location.href = response;        
-      } catch (error) {
-        toast.error("Something went wrong. Please try again!");
-      }
+  const getAccountDetails = async () => {
+    try {
+      const response = await dispatch(getConnectedAccountDetails()).unwrap();
+      setAccount(response);
+      setIsConnected(response.accountStatus === 'ACTIVE');
+    } catch (error) {
+      setIsConnected(false);
     }
   };
 
+  useEffect(() => {
+    getAccountDetails();
+  }, []);
+
+  const handleConnect = async () => {
+    if (!isConnected) {
+      setLoading('connect');
+      try {
+        const response = await dispatch(getAccountConnectingLink()).unwrap();
+        window.location.href = response;
+      } catch (error) {
+        toast.error('Something went wrong. Please try again!');
+      } finally {
+        setLoading(null);
+      }
+    } else {
+      modalRef.current?.showModal();
+    }
+  };
+
+  const handleRemoveAccount = async () => {
+    setLoading('remove');
+    try {
+      await dispatch(removeConnectedAccount()).unwrap();
+      setIsConnected(false);
+      setAccount(null);
+      toast.success('Account disconnected successfully!');
+      warningModalRef.current?.close();
+      modalRef.current?.close();
+    } catch (error) {
+      toast.error('Failed to disconnect the account. Please try again!');
+    } finally {
+      setLoading(null);
+    }
+  };
+
+
   return (
     <div className="min-h-screen">
-      {/* Header */}
       <header className="bg-blue-950 rounded-[5px] text-white py-6 px-8">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Organizer Information */}
-        <div>
-          <h2 className="text-lg font-semibold">Stripe Account Connection</h2>
-          <p className="text-sm text-gray-300">
-            {isConnected
-              ? "Your Stripe account is successfully connected. You can now receive payouts from Qorvia."
-              : "Connect your Stripe account to enable payouts from the Qorvia platform."}
-          </p>
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div>
+            <h2 className="text-lg font-semibold">Stripe Account Connection</h2>
+            <p className="text-sm text-gray-300">
+              {isConnected
+                ? 'Your Stripe account is successfully connected. You can now receive payouts from Qorvia.'
+                : 'Connect your Stripe account to enable payouts from the Qorvia platform.'}
+            </p>
+          </div>
+
+          <button
+            onClick={handleConnect}
+            disabled={loading === 'connect'}
+            className={`px-6 py-2 rounded-[10px] flex items-center space-x-2 ${
+              isConnected
+                ? 'bg-green-700 hover:bg-green-800'
+                : 'bg-blue-800 hover:bg-blue-700'
+            } transition-colors disabled:opacity-50`}
+          >
+            {loading === 'connect' ? (
+              <span className="loader" />
+            ) : (
+              <Link className="h-5 w-5" />
+            )}
+            <span>{isConnected ? 'Connected' : 'Connect Account'}</span>
+          </button>
         </div>
+      </header>
 
-        {/* Connect Button */}
-        <button
-          onClick={handleConnect}
-          className={`px-6 py-2 rounded-[10px] flex items-center space-x-2 ${
-            isConnected 
-              ? 'bg-green-700 hover:bg-green-800' 
-              : 'bg-blue-800 hover:bg-blue-700'
-          } transition-colors`}
-        >
-          {/* Add an Icon or Placeholder */}
-          <Link className="h-5 w-5" />
-          <span>{isConnected ? 'Connected' : 'Connect Account'}</span>
-        </button>
-      </div>
-    </header>
+      {/* Account Modal */}
+      <dialog ref={modalRef} id="account_modal" className="modal">
+        <div className="modal-box w-11/12 max-w-5xl">
+          <h3 className="font-bold text-lg">Account Details</h3>
+          {account ? (
+            <div className="py-4">
+              <p>
+                <strong>Status:</strong> {account.accountStatus}
+              </p>
+              <p>
+                <strong>Account ID:</strong> {account.organizerAccountId}
+              </p>
+              <p>
+                <strong>Email:</strong> {account.organizerEmail}
+              </p>
+            </div>
+          ) : (
+            <p className="py-4">No account details available.</p>
+          )}
 
-      {/* Main Content */}
+          <div className="modal-action">
+            <button
+              onClick={() => warningModalRef.current?.showModal()}
+              disabled={loading === 'remove'}
+              className="btn bg-red-700 hover:bg-red-800 text-white disabled:opacity-50"
+            >
+              {loading === 'remove' ? <span className="loader" /> : 'Disconnect Account'}
+            </button>
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+
+      {/* Warning Modal */}
+      <dialog ref={warningModalRef} id="warning_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-red-600 text-lg">Are you sure?</h3>
+          <p className="py-4">
+            Disconnecting your Stripe account will prevent payouts from being processed. This action
+            is irreversible.
+          </p>
+          <div className="modal-action">
+            <button
+              onClick={handleRemoveAccount}
+              disabled={loading === 'remove'}
+              className="btn bg-red-700 hover:bg-red-800 text-white disabled:opacity-50"
+            >
+              {loading === 'remove' ? <span className="loader" /> : 'Confirm'}
+            </button>
+            <form method="dialog">
+              <button className="btn">Cancel</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+
+
       <main className="max-w-7xl mx-auto py-8 px-4">
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-[5px] shadow-md">
             <div className="flex items-center justify-between">
@@ -128,7 +227,6 @@ function OrganizerPayoutManagement() {
           </div>
         </div>
 
-        {/* Payouts List */}
         <div className="bg-white rounded-[5px] shadow-md">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-blue-900">Recent Payouts</h2>

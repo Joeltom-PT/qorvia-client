@@ -73,6 +73,8 @@ export interface IOrganizerEndPoints extends IEndPoints {
 
   getBookedUsersList: string;
   fetchLiveEvents: string;
+  getConnectedAccountDetails: string;
+  removeConnectedAccount: string;
 }
 
 export interface IAdminEndPoints {
